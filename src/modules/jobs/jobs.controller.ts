@@ -23,6 +23,11 @@ export const getJob = async (req: Request, res: Response) => {
 };
 
 export const createJob = async (req: Request, res: Response) => {
+  const token = req.headers.authorization?.split(' ')[1];
+  
+  if (!token) {
+    return res.status(401).json({ success: false, message: 'Unauthorized' });
+  }
   try {
     const { title, company, location, category, description } = req.body;
     
@@ -38,6 +43,11 @@ export const createJob = async (req: Request, res: Response) => {
 };
 
 export const deleteJob = async (req: Request, res: Response) => {
+  const token = req.headers.authorization?.split(' ')[1];
+  
+  if (!token) {
+    return res.status(401).json({ success: false, message: 'Unauthorized' });
+  }
   try {
     const job = await jobsService.deleteJob(parseInt(req.params.id));
     if (!job) {

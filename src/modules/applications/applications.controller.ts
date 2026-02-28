@@ -36,3 +36,27 @@ export const createApplication = async (req: Request, res: Response) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
+
+export const getMyApplications = async (req: Request, res: Response) => {
+  const email = (req as any).user?.email;
+  
+  if (!email) {
+    return res.status(401).json({ success: false, message: 'Unauthorized' });
+  }
+
+  try {
+    const applications = await applicationsService.getApplicationsByEmail(email);
+    res.json({ success: true, data: applications });
+  } catch (error: any) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+export const getAllApplications = async (req: Request, res: Response) => {
+  try {
+    const applications = await applicationsService.getAllApplications();
+    res.json({ success: true, data: applications });
+  } catch (error: any) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};

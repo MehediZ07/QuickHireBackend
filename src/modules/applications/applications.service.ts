@@ -8,3 +8,25 @@ export const createApplication = async (applicationData: any) => {
   );
   return result.rows[0];
 };
+
+export const getApplicationsByEmail = async (email: string) => {
+  const result = await pool.query(
+    `SELECT a.*, j.title, j.company, j.location, j.logo 
+     FROM applications a 
+     JOIN jobs j ON a.job_id = j.id 
+     WHERE a.email = $1 
+     ORDER BY a.created_at DESC`,
+    [email]
+  );
+  return result.rows;
+};
+
+export const getAllApplications = async () => {
+  const result = await pool.query(
+    `SELECT a.*, j.title, j.company 
+     FROM applications a 
+     JOIN jobs j ON a.job_id = j.id 
+     ORDER BY a.created_at DESC`
+  );
+  return result.rows;
+};
